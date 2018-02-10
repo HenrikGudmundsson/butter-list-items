@@ -1,0 +1,133 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="sliding-list-item">
+    <template>
+        <style>
+            :host {
+                display: block;
+                height: var(--height, 12rem);
+                margin-bottom: 2px;
+                transition: all 0.4s ease-out;
+                padding:0rem 0.5rem 0 0.5rem;
+            }
+            .content-wrapper {
+                height: 100%;
+                background-color: var(--background-color, lightgray);;
+                display: flex;
+                align-items: center;
+                padding-left: 3rem;
+                font-size: 4rem;
+                font-family: helvetica;
+                font-weight: 300;
+                box-shadow: 1px 0px 3px lightgray;
+            }
+
+            .content-wrapper.animate {
+                transition-timing-function: ease-out;
+                transition-property: transform;
+            }
+
+            .content-wrapper.animate-right {
+                transition-duration: 200ms;
+            }
+
+            .content-wrapper.animate-left {
+                transition-duration: 300ms;
+            }
+        </style>
+    </template>
+    <script>
+        class slidingListItem extends Polymer.Element {
+            static get is() {
+                return 'sliding-list-item';
+            }
+
+            fireEvent(eventName) {
+                this.dispatchEvent(new CustomEvent(eventName, { composed: true, bubbles: true, detail: { id: this.id }}));
+            }
+
+            static get observedAttributes() { return ['text', 'id']; }
+
+            attributeChangedCallback(attr, oldValue, newValue) {
+                switch (attr) {
+                    case 'text':
+                        this.item.innerHTML = newValue;
+                        break;
+                }
+            }
+
+            constructor() {
+                super();
+                const shadow = this.attachShadow({ mode: 'open' });
+                this.contentWrapper = document.createElement('div');
+                this.contentWrapper.className = 'content-wrapper';
+
+                const getItemVelocity = (touchMoveX, lastMove)=> {
+                    const distanceDelta = touchMoveX - lastMove.posX;
+                    const timeDelta = lastMove.time;
+                    const timeDeltaPerSecond = 1000 / timeDelta;
+                    let velocity = distanceDelta / timeDeltaPerSecond;
+                    return velocity;
+                };
+
+                function didUserSlideRight(velocity) {
+                    return velocity > 20036571230 ? true : false;
+                }
+
+                let lastMove = {};
+
+                let touchStartX;
+
+                this.contentWrapper.addEventListener('click', ()=> {
+                    this.fireEvent('slider-list-item-clicked');
+                });
+
+                this.contentWrapper.addEventListener("touchstart", (event)=> {
+                    touchStartX =  event.touches[0].pageX;
+                    this.contentWrapper.classList.remove('animate');
+                    this.contentWrapper.classList.remove('animate-right');
+                    this.contentWrapper.classList.remove('animate-left');
+                });
+
+                this.contentWrapper.addEventListener("touchmove", (event)=> {
+                    const touchMoveX =  event.touches[0].pageX;
+                    this.velocity = getItemVelocity(touchMoveX, lastMove);
+                    const touchXDelta = touchStartX - touchMoveX;
+                    this.contentWrapper.style.cssText = `transform: translate3d(${-touchXDelta}px,0,0)`;
+                    lastMove.posX = touchMoveX;
+                    lastMove.time = Date.now();
+                });
+
+                this.contentWrapper.addEventListener("touchend", (event)=> {
+                    if(didUserSlideRight(this.velocity)) {
+                        const itemWidth = this.getBoundingClientRect().width;
+                        this.contentWrapper.style.cssText = `transform: translate3d(${itemWidth}px,0,0)`;
+                        this.contentWrapper.classList.add('animate');
+                        this.contentWrapper.classList.add('animate-right');
+                    } else {
+                        this.contentWrapper.style.cssText = `transform: translate3d(0,0,0)`;
+                        this.contentWrapper.classList.add('animate');
+                        this.contentWrapper.classList.add('animate-left');
+                    }
+                });
+
+                this.contentWrapper.addEventListener('transitionend', (e)=> {
+                    if(e.target.className.includes('animate-right')) {
+                        this.fireEvent('slider-list-item-removed');
+                        this.style.cssText = `height: 0; margin: 0;`;
+                        setTimeout(()=> {
+                            this.remove();
+                        }, 2000);
+                    }
+                });
+
+                this.item = document.createElement('span');
+                this.contentWrapper.appendChild(this.item);
+
+                shadow.appendChild(this.contentWrapper);
+            }
+        }
+
+        customElements.define(slidingListItem.is, slidingListItem);
+    </script>
+</dom-module>
