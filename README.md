@@ -59,9 +59,6 @@ It's kind of a work in progress at the moment, so I havn't had time to add to mu
             overflow: hidden;
         }
     </style>
-    <div class="title">
-        <h1>{{ message }}</h1>
-    </div>
     <div class="info">
         <span>(To slide on a desktop browser, you need to use your devtools and change to mobile browser simulation.</span>
     </div>
