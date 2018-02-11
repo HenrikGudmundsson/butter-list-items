@@ -26,7 +26,7 @@
             }
         </style>
         <div class="title">
-            <h1>{{messageText}}</h1>
+            <h1>{{ message }}</h1>
         </div>
         <div class="info">
             <span>(To slide on a desktop browser, you need to use your devtools and change to mobile browser simulation.</span>
@@ -38,7 +38,6 @@
             <sliding-list-item text="Fourth item" id="4"></sliding-list-item>
             <sliding-list-item text="Fifth item" id="5"></sliding-list-item>
             <sliding-list-item text="Sixth item" id="6"></sliding-list-item>
-            <sliding-list-item text="Seventh item" id="7"></sliding-list-item>
         </div>
     </template>
 
@@ -49,13 +48,13 @@
             constructor() {
                 super();
 
-                this.messageText = 'Click, tap or slide the list items';
+                this.message = 'Click, tap or slide the list items';
 
                 document.addEventListener('slider-list-item-removed', (e)=> {
-                    this.messageText = `Item removed - ID: ${ e.detail.id }`;
+                    this.message = `Item removed - ID: ${ e.detail.id }`;
                 });
                 document.addEventListener('slider-list-item-clicked', (e)=> {
-                    this.messageText = `Item clicked - ID: ${ e.detail.id }`;
+                    this.message = `Item clicked - ID: ${ e.detail.id }`;
                 });
             }
         }
