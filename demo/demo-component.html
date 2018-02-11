@@ -39,26 +39,26 @@
             <sliding-list-item text="Fifth item" id="5"></sliding-list-item>
             <sliding-list-item text="Sixth item" id="6"></sliding-list-item>
         </div>
-    </template>
 
-    <script>
-        class DemoComponent extends Polymer.Element {
-            static get is() { return 'demo-component' }
+        <script>
+            class DemoComponent extends Polymer.Element {
+                static get is() { return 'demo-component' }
 
-            constructor() {
-                super();
+                constructor() {
+                    super();
 
-                this.message = 'Click, tap or slide the list items';
+                    this.message = 'Click, tap or slide the list items';
 
-                document.addEventListener('slider-list-item-removed', (e)=> {
-                    this.message = `Item removed - ID: ${ e.detail.id }`;
-                });
-                document.addEventListener('slider-list-item-clicked', (e)=> {
-                    this.message = `Item clicked - ID: ${ e.detail.id }`;
-                });
+                    document.addEventListener('slider-list-item-removed', (e)=> {
+                        this.message = `Item removed - ID: ${ e.detail.id }`;
+                    });
+                    document.addEventListener('slider-list-item-clicked', (e)=> {
+                        this.message = `Item clicked - ID: ${ e.detail.id }`;
+                    });
+                }
             }
-        }
 
-        customElements.define(DemoComponent.is, DemoComponent);
-    </script>
+            customElements.define(DemoComponent.is, DemoComponent);
+        </script>
+    </template>
 </dom-module>
