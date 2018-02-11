@@ -1,6 +1,6 @@
-# Butter list item
+# Butter list items
 
-I built this list item as a web component, that can be slided sideways. If slided to the right it slides ot out view, and if slided to the left it bounces back to the initial position. When slided out view, clicked at, or tapped at events will be fired for each corresponding action. The consumer can add item text and id to the component through the bindings "text" and "id".
+I built this list item as a Polymer component, that can be slided sideways. If slided to the right it slides ot out view, and if slided to the left it bounces back to the initial position. When slided out view, clicked at, or tapped at events will be fired for each corresponding action. The consumer can add item text and id to the component through the bindings "text" and "id".
 
 It's kind of a work in progress at the moment, so I havn't had time to add to much documentation yet.
 
